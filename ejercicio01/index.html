@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proyecto de Base de Datos</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Ejercicio de Base de Datos</h1>
+    </header>
+
+    <section id="views-procedures">
+      <h2>MySQL: VIEWS y Procedimientos Almacenados</h2>
+      <h3>Views</h3>
+      <p>
+        1. Una vista es una tabla virtual que no necesitamos crear una tabla
+        adicional y solo se guarda la consulta SELECT. No almacena datos por si
+        mismo
+      </p>
+      <p>
+        2. Se puede usar como medida de seguridad para limitar lo que un usuario
+        puede ver, se le da acceso a las vistas y no a las tablas
+      </p>
+      <p>
+        3. Oculta la complejidad de las consultas para que sea más fácil su
+        lectura
+      </p>
+
+      <h4>EJEMPLOS VIEWS</h4>
+      <p>CREATE VIEW v_mayores_de_25 AS SELECT * FROM users WHERE edad > 25;</p>
+      <p>
+        CREATE VIEW v_invitacion_concierto_reggaeton AS SELECT * FROM users
+        WHERE musica = "reggaeton"
+      </p>
+      <p>
+        CREATE VIEW v_nombres_completos AS SELECT nombres, apellidos FROM users
+      </p>
+      <p>
+        CREATE VIEW v_usuarios_por_pais AS SELECT pais, COUNT(*) AS
+        cantidad_por_pais FROM users GROUP BY pais;
+      </p>
+      <p>
+        CREATE VIEW v_orden_por_edad AS SELECT * FROM users ORDER BY edad DESC;
+      </p>
+
+      <span
+        >Fuente:_https://dev.mysql.com/doc/refman/8.0/en/view-syntax.html</span
+      >
+
+      <h3>Procedimientos almacenados</h3>
+      <p>
+        Los procedimientos almacenados son conjuntos de instrucciones SQL que se
+        almacenan en el servidor de la base de datos bajo un nombre particular y
+        pueden ser ejecutados por una aplicación o un cliente. Ayudan a
+        encapsular lógica de negocio y facilitan la reutilización de código.
+        Pueden recibir parámetros. Son bloques de código SQL que se pueden
+        reutilizar. Se pueden usar para realizar tareas complejas, como:
+      </p>
+
+      <ul>
+        <li>Validar datos</li>
+        <li>Realizar cálculos complejos</li>
+        <li>Ejecutar múltiples consultas</li>
+        <li>Controlar el flujo de la lógica</li>
+      </ul>
+
+      <h4>EJEMPLOS PROCEDIMIENTOS ALMACENADOS</h4>
+      <p>
+        CREATE PROCEDURE insertar_persona( IN nombre VARCHAR(255), IN apellido
+        VARCHAR(255), IN correo VARCHAR(255), IN edad INT, IN genero
+        VARCHAR(255), IN pais VARCHAR(255), IN musica VARCHAR(255)) BEGIN INSERT
+        INTO users (nombres, apellidos, correo, edad, genero, pais, musica)
+        VALUES (nombre, apellido, correo, edad, genero, pais, musica); END //
+        DELIMITER ;
+      </p>
+      <p>
+        DELIMITER // CREATE PROCEDURE actualizar_usuario( IN usuario_id INT, IN
+        nombres VARCHAR(255), IN apellidos VARCHAR(255), IN correo VARCHAR(255),
+        IN edad INT, IN genero VARCHAR(255), IN pais VARCHAR(255), IN musica
+        VARCHAR(255) ) BEGIN UPDATE users SET nombres = nombres, apellidos =
+        apellidos, correo = correo, edad = edad, genero = genero, pais = pais,
+        musica = musica WHERE id = usuario_id; END // DELIMITER ;
+      </p>
+      <p>
+        DELIMITER // CREATE PROCEDURE actualizar_musica(IN persona_id INT, IN
+        nueva_musica VARCHAR(255)) BEGIN UPDATE users SET musica = nueva_musica
+        WHERE id = persona_id; END // DELIMITER ;
+      </p>
+      <p>
+        DELIMITER // CREATE PROCEDURE actualizar_nombres(IN persona_id INT, IN
+        nuevo_nombre VARCHAR(255)) BEGIN UPDATE users SET nombres = nuevo_nombre
+        WHERE id = persona_id; END // DELIMITER
+      </p>
+      <p>
+        DELIMITER // CREATE PROCEDURE eliminar_usuario( IN user_id INT ) BEGIN
+        DELETE FROM users WHERE id = user_id; END // DELIMITER ;
+      </p>
+      <span
+        >Fuente:
+        https://dev.mysql.com/doc/refman/8.0/en/stored-routines-syntax.html</span
+      >
+    </section>
+
+    <section id="sql-nosql">
+      <h2>Diferencia entre SQL y NoSQL</h2>
+      <p>
+        SQL (Structured Query Language) es un lenguaje de consulta para bases de
+        datos relacionales, mientras que NoSQL se refiere a un enfoque más
+        flexible y escalable para el almacenamiento y recuperación de datos, que
+        no sigue un modelo de base de datos relacional.
+      </p>
+
+      <h4>Base de datos relacional:</h4>
+
+      <p>
+        Los datos se almacenan en tablas con relaciones entre ellas.
+        Estructurada: Los datos se organizan en filas y columnas con tipos de
+        datos específicos. Lenguaje de consulta declarativo: Se describe qué se
+        quiere obtener, no cómo obtenerlo. Adecuado para: Transacciones,
+        análisis de datos, aplicaciones con relaciones complejas.
+      </p>
+
+      <h4>NoSQL</h4>
+      <p>
+        Base de datos no relacional: Los datos se pueden almacenar en diferentes
+        formatos, como documentos, columnas o claves-valor. No estructurada: Los
+        datos pueden tener diferentes estructuras y no necesitan tener un tipo
+        de dato específico. Lenguaje de consulta imperativo: Se describe cómo
+        obtener los datos. Adecuado para: Aplicaciones con grandes volúmenes de
+        datos, aplicaciones con estructuras de datos flexibles, aplicaciones que
+        necesitan escalabilidad horizontal.
+      </p>
+    </section>
+
+    <section id="mongodb">
+      <h2>MongoDB</h2>
+      <p>
+        MongoDB es una base de datos NoSQL orientada a documentos. Es una base
+        de datos distribuida y escalable que se puede usar para almacenar
+        grandes volúmenes de datos.
+      </p>
+    </section>
+
+    <section id="mongo-operations">
+      <h2>Operaciones en MongoDB</h2>
+      <p>
+        No logré entender muy bien esta parte. Logré crear un cluster en MongoDB
+        Atlas, crear un proyecto y una base de datos con su colección. Lo logré
+        conectar usando compass pero después no supe que hacer porque esta
+        herramienta gráfica permite hacer esta operaciones sin necesidad de
+        tener queries. Es la primera vez que veo algo relacionado con BD no
+        relacionales, no sé muy bien qué estoy haciendo. Agrego pantallazo hasta
+        el punto que llegué. Supongo que se deben hacer instalaciones,
+        conectarse con MongoDB Atlás y demás pero no supe ni si quiera que video
+        o tutorial ver para comenzar
+      </p>
+
+      <img
+        src="pantallazo_mongoDB.png"
+        style="height: 400px; width: 800px"
+        alt=""
+      />
+    </section>
+
+    <footer>
+      <p>&copy; 2024 Proyecto de Base de Datos</p>
+    </footer>
+  </body>
+</html>

@@ -144,3 +144,126 @@ SELECT count(*) FROM users WHERE pais="ecuador"
 
 -- cuantos usuarios son de colombia y les gusta el vallenato
 SELECT COUNT (*) FROM users WHERE pais="colombia" AND musica="vallenato" 
+
+/* VIEWS en SQL */
+CREATE VIEW v_mayores_de_25 AS
+SELECT * FROM users WHERE edad > 25;
+
+SELECT * FROM v_mayores_de_25;
+
+CREATE VIEW v_invitacion_concierto_reggaeton AS
+SELECT * FROM users WHERE musica = "reggaeton"
+
+
+SELECT * FROM v_invitacion_concierto_reggaeton
+
+CREATE VIEW v_nombres_completos AS
+SELECT nombres, apellidos FROM users
+
+SELECT * FROM v_nombres_completos
+
+CREATE VIEW v_usuarios_por_pais AS
+SELECT pais, COUNT(*) AS cantidad_por_pais FROM users GROUP BY pais;
+
+SELECT * FROM v_usuarios_por_pais
+
+CREATE VIEW v_orden_por_edad AS
+SELECT * FROM users ORDER BY edad DESC;
+
+SELECT * FROM v_orden_por_edad
+
+/* PROCEDIMIENTOS ALMACENADOS */
+DELIMITER //
+CREATE PROCEDURE insertar_persona(
+    IN nombre VARCHAR(255), 
+    IN apellido VARCHAR(255), 
+    IN correo VARCHAR(255), 
+    IN edad INT, 
+    IN genero VARCHAR(255), 
+    IN pais VARCHAR(255), 
+    IN musica VARCHAR(255))
+BEGIN
+  INSERT INTO users (nombres, apellidos, correo, edad, genero, pais, musica) 
+  VALUES (nombre, apellido, correo, edad, genero, pais, musica);
+END //
+DELIMITER ;
+
+CALL insertar_persona('Manuela', 'Torres', 'manuela@gmail.com', 30, 'M', 'colombia', 'rock');
+
+SELECT * FROM users WHERE nombres = 'Manuela';
+
+DELIMITER //
+
+CREATE PROCEDURE actualizar_usuario(
+    IN id INT,
+    IN nombres VARCHAR(255),
+    IN apellidos VARCHAR(255),
+    IN correo VARCHAR(255),
+    IN edad INT,
+    IN genero VARCHAR(255),
+    IN pais VARCHAR(255),
+    IN musica VARCHAR(255)
+)
+BEGIN
+    UPDATE users
+    SET nombres = nombres,
+        apellidos = apellidos,
+        correo = correo,
+        edad = edad,
+        genero = genero,
+        pais = pais,
+        musica = musica
+    WHERE id = id;
+END //
+
+
+DELIMITER ;
+
+CALL actualizar_usuario(20001, 'NuevoNombre', 'NuevoApellido', 'NA', 30, 'NuevoGenero', 'NuevoPais', 'NuevaMusica');
+
+
+DELIMITER //
+CREATE PROCEDURE actualizar_nombres(IN persona_id INT, IN nuevo_nombre VARCHAR(255))
+BEGIN
+  UPDATE users SET nombres = nuevo_nombre WHERE id = persona_id;
+END //
+DELIMITER 
+
+CALL actualizar_nombres (20001,"Manuelita")
+
+SELECT * FROM users WHERE nombres = 'Manuelita';
+
+DELIMITER //
+CREATE PROCEDURE actualizar_musica(IN persona_id INT, IN nueva_musica VARCHAR(255))
+BEGIN
+  UPDATE users SET musica = nueva_musica WHERE id = persona_id;
+END //
+DELIMITER ;
+
+CALL actualizar_musica (1,"despecho")
+
+DELIMITER //
+CREATE PROCEDURE obtener_usuario_por_correo(IN correo_buscar VARCHAR(255))
+BEGIN
+  SELECT * FROM users WHERE correo = correo_buscar;
+END //
+DELIMITER ;
+
+CALL obtener_usuario_por_correo("manuela@gmail.com")
+
+SELECT * FROM users WHERE correo = 'manuela@gmail.com';
+
+DELIMITER //
+
+CREATE PROCEDURE eliminar_usuario(
+    IN user_id INT
+)
+BEGIN
+    DELETE FROM users
+    WHERE id = user_id;
+END //
+
+DELIMITER ;
+
+
+
